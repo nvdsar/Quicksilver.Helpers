@@ -4,11 +4,32 @@
 	  <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 	  <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>Persian Date Helpers</Title>
+    <Authors>Navid Sargheiny</Authors>
+    <Description>This repository was created by Navid Sargheiny as a simple library to utilize Persian date capabilities. It has many features, such as providing different types of Persian dates and offering means to extract Persian dates as Persian text.</Description>
+    <Copyright>2024</Copyright>
+    <PackageIcon>NSIcon.png</PackageIcon>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
+    <PackageTags>Persian; date; PersianDate; extensions; helpers; Date; SolarHijri; Shamsi; Ghamari; LunarHijri; Hijri; Gregorian; Miladi; Iran;</PackageTags>
+    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Quicksilver.DataConversion\Quicksilver.DataConversion.csproj" />
     <ProjectReference Include="..\Quicksilver.StringHelpers\Quicksilver.StringHelpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NSIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

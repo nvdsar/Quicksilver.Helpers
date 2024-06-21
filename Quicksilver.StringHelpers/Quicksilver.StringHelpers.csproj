@@ -4,10 +4,29 @@
 	  <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 	  <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Copyright>2024</Copyright>
+    <PackageIcon>NSIcon.png</PackageIcon>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
+    <PackageTags>string; helpers; extensions; Persian; Iran; farsi; arabic; plural; </PackageTags>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <Title>Persian String Helpers</Title>
+    <Authors>Navid Sargheiny</Authors>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Quicksilver.DataConversion\Quicksilver.DataConversion.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NSIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="ReadMe.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
