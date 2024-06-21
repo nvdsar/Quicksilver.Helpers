@@ -1,4 +1,5 @@
 ﻿using Quicksilver.DataConversion;
+using System.Text;
 
 namespace Quicksilver.StringHelpers
 {
@@ -85,6 +86,60 @@ namespace Quicksilver.StringHelpers
         public static string TrimEnd(this string source, string trimWord)
         {
             return source.Remove(source.LastIndexOf(trimWord) + trimWord.Count());
+        }
+    }
+    public static class PersianStringExtensions
+    {
+        /// <summary>
+        /// Converts Int64 Number to Persian Text 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static string ToPersianText(this long i)
+        {
+            return PersianStringHelpers.ToLess_1B_PersianText(i);
+        }
+        /// <summary>
+        /// Converts Int64 Number to Persian Text 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
+        public static string ToPersianText(this int i)
+        {
+            return PersianStringHelpers.ToLess_1B_PersianText(i);
+        }
+
+        /// <summary>
+        /// Convert entire string to Persian acceptable characters as well as numbers
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToPersianText(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value.ToString();
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < value.Length; i++)
+            {
+                var ch = value[i];
+                if (48 <= ch && ch <= 57)
+                    ch = (char)(ch + 1728);
+                if (ch == 46)
+                    ch = (char)47;
+                sb.Append(ch);
+            }
+            return sb.ToString().FixArabic();
+        }
+        /// <summary>
+        /// Fixing issues with Arabic characters within Persian strings by replacing them with Persian characters
+        /// </summary>
+        /// <param name="value">Arabic/Persian text</param>
+        /// <returns></returns>
+        public static string FixArabic(this string value)
+        {
+            return value.Replace("ؽ", "ی").Replace("ي", "ی").Replace("ؾ", "ی").Replace("ٸ", "ی")
+                .Replace("ك", "ک");
         }
     }
 }

@@ -75,5 +75,20 @@ namespace Quicksilver.StringHelpers.Tests
             var result = str.TrimEnd("Sargheiny");
             Assert.AreEqual(StringHelpersMockData.Sentence, result);
         }
+
+        [TestMethod()]
+        public void ToPersianTest()
+        {
+            var str = "لطفاً عدد 3322 و حروف ي و ك را اصلاح کن";
+            var result = str.ToPersianText();
+            Assert.AreEqual(StringHelpersMockData.ToPersianFix, result);
+        }
+        [TestMethod()]
+        public void ToPersianTest1()
+        {
+            var integer = 123456789;
+            var result = integer.ToPersianText();
+            Assert.AreEqual(StringHelpersMockData.ToPersian, result);
+        }
     }
 }

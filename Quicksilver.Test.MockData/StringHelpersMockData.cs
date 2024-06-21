@@ -7,6 +7,8 @@
         public static string SubstringTrim = "Navid";
         public static string CamelCase = "navidSargheiny";
         public static string Sentence = "My name is Navid Sargheiny";
+        public static string ToPersianFix = "لطفاً عدد ۳۳۲۲ و حروف ی و ک را اصلاح کن";
+        public static string ToPersian = "صد و بیست و سه میلیون و چهارصد و پنجاه و شش هزار و هفتصد و هشتاد و نه";
     }
     public class PersianDateMockData
     {
@@ -23,6 +25,7 @@
         public static string Short8Date = "20240617";
         public static string Monday = "دوشنبه";
         public static string Khordad = "خرداد";
+        public static string PersianDateText = "جمعه، اول تیر ماه یک هزار و چهارصد و سه";
 
     }
 }

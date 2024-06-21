@@ -147,12 +147,13 @@ namespace Quicksilver.DataConversion.Tests
         public void ToStringTest()
         {
             var d = 223;
+            const string str = "test";
             object? d1 = null;
-            var r = d.ToString("Golabi");
+            var r = d.ToString(str);
             Assert.IsNotNull(r);
             Assert.IsInstanceOfType(r, typeof(string));
-            var r1 = d1.ToString("Golabi");
-            Assert.AreEqual("Golabi", r1, false);
+            var r1 = d1.ToString(str);
+            Assert.AreEqual(str, r1, false);
         }
 
         [TestMethod()]

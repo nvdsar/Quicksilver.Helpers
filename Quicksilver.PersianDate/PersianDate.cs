@@ -1,10 +1,33 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel;
+using System.Globalization;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using Quicksilver.DataConversion;
 using Quicksilver.StringHelpers;
 
 namespace Quicksilver.PersianDate
 {
+    public enum DateFormat
+    {
+        yyyyMMdd,
+        yyMMdd,
+        /// <summary>
+        /// yy/MM/dd
+        /// </summary>
+        yy_MM_dd,
+        /// <summary>
+        /// yyyy/MM/dd
+        /// </summary>
+        yyyy_MM_dd,
+        /// <summary>
+        /// yyyy/MM/dd HH:mm:ss
+        /// </summary>
+        yyyy_MM_dd_HH_mm_ss,
+        /// <summary>
+        /// yyyyMMdd HHmm
+        /// </summary>
+        yyyyMMdd_HHmm,
+    }
     public static class PersianDate
     {
         private static PersianCalendar p = new PersianCalendar();
@@ -14,7 +37,7 @@ namespace Quicksilver.PersianDate
         /// </summary>
         /// <param name="date"><see langword="Gregorian"/> datetime</param>
         /// <returns>YYYY/MM/dd</returns>
-        public static string ToPersianDate(this DateTime date)
+        private static string ToPersianDate(this DateTime date)
         {
             return string.Format("{0}/{1}/{2}", p.GetYear(date).ToPadString(4, '0'), p.GetMonth(date).ToPadString(2, '0'), p.GetDayOfMonth(date).ToPadString(2, '0'));
         }
@@ -23,7 +46,7 @@ namespace Quicksilver.PersianDate
         /// </summary>
         /// <param name="date"><see langword="Gregorian"/> datetime</param>
         /// <returns>YY/MM/dd</returns>
-        public static string To2DigitYearPersianDate(this DateTime dt)
+        private static string To2DigitYearPersianDate(this DateTime dt)
         {
             return string.Format("{0}/{1}/{2}", p.GetYear(dt).ToString().Substring(2, 2).PadLeft(2, '0'), p.GetMonth(dt).ToPadString(2, '0'), p.GetDayOfMonth(dt).ToPadString(2, '0'));
         }
@@ -32,7 +55,7 @@ namespace Quicksilver.PersianDate
         /// </summary>
         /// <param name="date"><see langword="Gregorian"/> datetime</param>
         /// <returns>YYMMdd</returns>
-        public static string To6DigitPersianDate(this DateTime dt)
+        private static string To6DigitPersianDate(this DateTime dt)
         {
             return string.Format("{0}{1}{2}", p.GetYear(dt).ToString().Substring(2, 2).PadLeft(2, '0'), p.GetMonth(dt).ToPadString(2, '0'), p.GetDayOfMonth(dt).ToPadString(2, '0'));
         }
@@ -41,7 +64,7 @@ namespace Quicksilver.PersianDate
         /// </summary>
         /// <param name="date"><see langword="Gregorian"/> datetime</param>
         /// <returns>YYYYMMdd</returns>
-        public static string To8DigitPersianDate(this DateTime dt)
+        private static string To8DigitPersianDate(this DateTime dt)
         {
             return string.Format("{0}{1}{2}", p.GetYear(dt).ToPadString(4, '0'), p.GetMonth(dt).ToPadString(2, '0'), p.GetDayOfMonth(dt).ToPadString(2, '0'));
         }
@@ -50,7 +73,7 @@ namespace Quicksilver.PersianDate
         /// </summary>
         /// <param name="date"><see langword="Gregorian"/> datetime</param>
         /// <returns>YY/MM/dd hh:mm:ss</returns>
-        public static string ToPersianDateTime(this DateTime dt)
+        private static string ToPersianDateTime(this DateTime dt)
         {
             return string.Format("{0}/{1}/{2} {3}:{4}:{5}", p.GetYear(dt).ToPadString(4, '0'), p.GetMonth(dt).ToPadString(2, '0'),
                 p.GetDayOfMonth(dt).ToPadString(2, '0'), dt.Hour.ToPadString(2, '0'), dt.Minute.ToPadString(2, '0'), dt.Second.ToPadString(2, '0'));
@@ -60,12 +83,35 @@ namespace Quicksilver.PersianDate
         /// </summary>
         /// <param name="date"><see langword="Gregorian"/> datetime</param>
         /// <returns>YYYYMMdd HHmm</returns>
-        public static string ToPersianShortDateTime(this DateTime date)
+        private static string ToPersianShortDateTime(this DateTime date)
         {
             var persianDate = date.To8DigitPersianDate();
             return $"{persianDate} {date.ToString("HHmm")}";
         }
-
+        /// <summary>
+        /// Convert <see langword="Gregorian"/> datetime to <see langword="Persian (Solar Hijri)"/> string based on <paramref name="format"/>
+        /// </summary>
+        /// <param name="date"><see langword="Gregorian"/> datetime</param>
+        /// <param name="format"></param>
+        public static string ToPersianDate(this DateTime date, DateFormat format)
+        {
+            switch (format)
+            {
+                case DateFormat.yyyyMMdd:
+                    return date.To8DigitPersianDate();
+                case DateFormat.yyMMdd:
+                    return date.To6DigitPersianDate();
+                case DateFormat.yy_MM_dd:
+                    return date.To2DigitYearPersianDate();
+                default:
+                case DateFormat.yyyy_MM_dd:
+                    return date.ToPersianDate();
+                case DateFormat.yyyy_MM_dd_HH_mm_ss:
+                    return date.ToPersianDateTime();
+                case DateFormat.yyyyMMdd_HHmm:
+                    return date.ToPersianShortDateTime();
+            }
+        }
         /// <summary>
         /// Convert <see langword="Persian (Solar Hijri)"/> string to <see langword="Gregorian"/> datetime
         /// </summary>
@@ -188,9 +234,9 @@ namespace Quicksilver.PersianDate
         /// </summary>
         /// <param name="monthNum"></param>
         /// <returns></returns>
-        public static string GetMonthName(object monthNum)
+        public static string GetMonthName(byte monthNum)
         {
-            return monthNum.ToByte() switch
+            return monthNum switch
             {
                 1 => "فروردین",
                 2 => "اردیبهشت",
@@ -207,6 +253,18 @@ namespace Quicksilver.PersianDate
                 _ => "نا معتبر",
             };
         }
-
+        /// <summary>
+        /// Convert Date to Persian text date
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static string GetPersianDateText(DateTime date)
+        {
+            var dayOfWeek = GetDayOfWeek(date.DayOfWeek);
+            var year = p.GetYear(date);
+            var monthName = GetMonthName(p.GetMonth(date).ToByte());
+            var day = PersianStringHelpers.ToRankingPersianText(p.GetDayOfMonth(date));
+            return $"{dayOfWeek}، {day} {monthName} ماه {year.ToPersianText()}";
+        }
     }
 }

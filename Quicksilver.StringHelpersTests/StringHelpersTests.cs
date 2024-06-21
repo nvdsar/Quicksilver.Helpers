@@ -16,7 +16,7 @@ namespace Quicksilver.StringHelpers.Tests
         public void GetPluralCommaTest()
         {
             var texts = new string[] { "سبب", "گلابی", "توت فرنگی", "هلو", "شلیل" };
-            var result = StringHelpers.GetPluralComma(string.Join(',', texts));
+            var result = PersianStringHelpers.GetPluralComma(string.Join(',', texts));
             var mockData = StringHelpersMockData.PluralComma;
             Assert.AreEqual(mockData, result, true);
         }
@@ -24,8 +24,8 @@ namespace Quicksilver.StringHelpers.Tests
         [TestMethod()]
         public void GetPluralCommaTest1()
         {
-            var texts = new string[] { "سبب", "گلابی", "توت فرنگی", "هلو", "شلیل" };
-            var result = StringHelpers.GetPluralComma(texts.ToList());
+            var texts = new List<string> { "سبب", "گلابی", "توت فرنگی", "هلو", "شلیل" };
+            var result = PersianStringHelpers.GetPluralComma(texts);
             var mockData = StringHelpersMockData.PluralComma;
             Assert.AreEqual(mockData, result, true);
         }

@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Quicksilver.PersianDate;
+﻿using Microsoft.VisualBasic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Quicksilver.Test.MockData;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace Quicksilver.PersianDate.Tests
         public void ToPersianDateTest()
         {
             var date = new DateTime(2024, 6, 17);
-            var persianDate = date.ToPersianDate();
+            var persianDate = date.ToPersianDate(DateFormat.yyyy_MM_dd);
             Assert.AreEqual(PersianDateMockData.FullPersianDate, persianDate);
         }
 
@@ -24,7 +24,7 @@ namespace Quicksilver.PersianDate.Tests
         public void To2DigitYearPersianDateTest()
         {
             var date = new DateTime(2024, 6, 17);
-            var persianDate = date.To2DigitYearPersianDate();
+            var persianDate = date.ToPersianDate(DateFormat.yy_MM_dd);
             Assert.AreEqual(PersianDateMockData.TwoDigitPersianDate, persianDate);
         }
 
@@ -32,7 +32,7 @@ namespace Quicksilver.PersianDate.Tests
         public void To6DigitPersianDateTest()
         {
             var date = new DateTime(2024, 6, 17);
-            var persianDate = date.To6DigitPersianDate();
+            var persianDate = date.ToPersianDate(DateFormat.yyMMdd);
             Assert.AreEqual(PersianDateMockData.SixDigitPersianDate, persianDate);
         }
 
@@ -40,7 +40,7 @@ namespace Quicksilver.PersianDate.Tests
         public void To8DigitPersianDateTest()
         {
             var date = new DateTime(2024, 6, 17);
-            var persianDate = date.To8DigitPersianDate();
+            var persianDate = date.ToPersianDate(DateFormat.yyyyMMdd);
             Assert.AreEqual(PersianDateMockData.EightDigitPersianDate, persianDate);
         }
 
@@ -48,7 +48,7 @@ namespace Quicksilver.PersianDate.Tests
         public void ToPersianDateTimeStringTest()
         {
             var date = new DateTime(2024, 6, 17, 12, 15, 16);
-            var persianDate = date.ToPersianDateTime();
+            var persianDate = date.ToPersianDate(DateFormat.yyyy_MM_dd_HH_mm_ss);
             Assert.AreEqual(PersianDateMockData.FullPersianDateTime, persianDate);
         }
 
@@ -56,7 +56,7 @@ namespace Quicksilver.PersianDate.Tests
         public void PersianShortDateTimeStringTest()
         {
             var date = new DateTime(2024, 6, 17, 12, 15, 16);
-            var persianDate = date.ToPersianShortDateTime();
+            var persianDate = date.ToPersianDate(format: DateFormat.yyyyMMdd_HHmm);
             Assert.AreEqual(PersianDateMockData.PersianShortDateTime, persianDate);
         }
 
@@ -121,6 +121,14 @@ namespace Quicksilver.PersianDate.Tests
         {
             var khordad = PersianDate.GetMonthName(3);
             Assert.AreEqual(PersianDateMockData.Khordad, khordad);
+        }
+
+        [TestMethod()]
+        public void GetPersianDateTextTest()
+        {
+            var date = new DateTime(2024, 6, 21, 21, 15, 16);
+            var result = PersianDate.GetPersianDateText(date);
+            Assert.AreEqual(PersianDateMockData.PersianDateText, result);
         }
     }
 }
