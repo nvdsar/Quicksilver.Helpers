@@ -12,6 +12,7 @@
     <PackageReleaseNotes>Initial release</PackageReleaseNotes>
     <Title>Persian String Helpers</Title>
     <Authors>Navid Sargheiny</Authors>
+    <Description>This repository was created by Navid Sargheiny as a simple library utility to help with strings, especially Persian strings. It has many features, such as providing plural commas, fixing Arabic texts within Farsi texts, and converting numbers into Persian strings.</Description>
   </PropertyGroup>
 
   <ItemGroup>
