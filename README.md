@@ -21,7 +21,7 @@ using Quicksilver.StringHelpers;
             var spaceTrim = str.SpaceTrim();    //  "My name is Navid Sargheiny"
 
             var texts = new List<string> { "سبب", "گلابی", "توت فرنگی", "هلو", "شلیل" };
-            var pluralComma = StringHelpers.GetPluralComma(texts);  //  "سبب، گلابی، توت فرنگی، هلو و شلیل"
+            var pluralComma = PersianStringHelpers.GetPluralComma(texts);  //  "سبب، گلابی، توت فرنگی، هلو و شلیل"
 ```
 
 ### PersianDate
