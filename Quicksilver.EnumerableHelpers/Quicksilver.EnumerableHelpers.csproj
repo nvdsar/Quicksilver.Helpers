@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Title>Simple Enumerable Helper</Title>
+		<Authors>Navid Sargheiny</Authors>
+		<Copyright>2024</Copyright>
+		<PackageIcon>NSIcon.png</PackageIcon>
+		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
+		<PackageTags>Enumerable; dynamic; datatable; table; list; enum; json;</PackageTags>
+		<PackageReleaseNotes>initial release</PackageReleaseNotes>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>This repository was created by Navid Sargheiny as a simple library to simplify enumerable conversions. It specializes in converting enumerables to dynamic and anonymous objects, and has the capability to convert IEnumerables to DataTable and more.</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Quicksilver.StringHelpers\Quicksilver.StringHelpers.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="NSIcon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Update="ReadMe.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

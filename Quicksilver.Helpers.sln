@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.DataConversion", "Quicksilver.DataConversion\Quicksilver.DataConversion.csproj", "{7499185F-1BD3-44B1-B145-09561D617D11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.DataConversion", "Quicksilver.DataConversion\Quicksilver.DataConversion.csproj", "{7499185F-1BD3-44B1-B145-09561D617D11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.StringHelpers", "Quicksilver.StringHelpers\Quicksilver.StringHelpers.csproj", "{E9DA1075-3740-43E0-88B6-CB266BEED81E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.StringHelpers", "Quicksilver.StringHelpers\Quicksilver.StringHelpers.csproj", "{E9DA1075-3740-43E0-88B6-CB266BEED81E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.PersianDate", "Quicksilver.PersianDate\Quicksilver.PersianDate.csproj", "{A9D45AD9-E83C-4DB6-9845-43B72B054DA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.PersianDate", "Quicksilver.PersianDate\Quicksilver.PersianDate.csproj", "{A9D45AD9-E83C-4DB6-9845-43B72B054DA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.Tests", "Quicksilver.StringHelpersTests\Quicksilver.Tests.csproj", "{1225B3F3-CBC2-4A73-B979-E3DABF6274B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.Tests", "Quicksilver.StringHelpersTests\Quicksilver.Tests.csproj", "{1225B3F3-CBC2-4A73-B979-E3DABF6274B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4DB54522-84E0-4FC9-9B70-E22FCB4D7E60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.Test.MockData", "Quicksilver.Test.MockData\Quicksilver.Test.MockData.csproj", "{25E75C7D-66F3-4EED-8F0D-E5E9140F6CAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.Test.MockData", "Quicksilver.Test.MockData\Quicksilver.Test.MockData.csproj", "{25E75C7D-66F3-4EED-8F0D-E5E9140F6CAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.EnumerableHelpers", "Quicksilver.EnumerableHelpers\Quicksilver.EnumerableHelpers.csproj", "{8AF65DF7-2C87-4032-B788-BE17ED64C88E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{25E75C7D-66F3-4EED-8F0D-E5E9140F6CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25E75C7D-66F3-4EED-8F0D-E5E9140F6CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25E75C7D-66F3-4EED-8F0D-E5E9140F6CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AF65DF7-2C87-4032-B788-BE17ED64C88E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AF65DF7-2C87-4032-B788-BE17ED64C88E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AF65DF7-2C87-4032-B788-BE17ED64C88E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AF65DF7-2C87-4032-B788-BE17ED64C88E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
