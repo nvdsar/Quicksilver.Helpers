@@ -9,10 +9,11 @@
     <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
     <PackageTags>string; helpers; extensions; Persian; Iran; farsi; arabic; plural; </PackageTags>
-    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <PackageReleaseNotes>IsNullOrEmpty method added</PackageReleaseNotes>
     <Title>Persian String Helpers</Title>
     <Authors>Navid Sargheiny</Authors>
     <Description>This repository was created by Navid Sargheiny as a simple library utility to help with strings, especially Persian strings. It has many features, such as providing plural commas, fixing Arabic texts within Farsi texts, and converting numbers into Persian strings.</Description>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +25,7 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include ="ReadMe.md">
+    <None Include="ReadMe.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
