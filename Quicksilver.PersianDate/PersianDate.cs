@@ -122,8 +122,9 @@ namespace Quicksilver.PersianDate
         /// <br>yyyy-MM-dd</br>
         /// <br>yyyy_MM_dd</br>
         /// </param>
+        /// <param name="time">Time of DateTime on TimeSpan format</param>
         /// <returns></returns>
-        public static DateTime ToGregorianDate(this string datePersian)
+        public static DateTime ToGregorianDate(this string datePersian, string time = "")
         {
             if (Regex.IsMatch(datePersian, patternPersianDate) == false)
                 throw new Exception("There is no Persian date in input parameter.");
@@ -133,10 +134,11 @@ namespace Quicksilver.PersianDate
             var i = is_8_letterDate ? 4 : 2;
             var bYear = datePersian.Substring(0, i).ToInt32();
             var bMonth = datePersian.Substring(i, 2).ToInt32();
-            i += 2;
-            var bDay = datePersian.Substring(i, 2).ToInt32();
+            var bDay = datePersian.Substring(i + 2, 2).ToInt32();
             if (is_8_letterDate == false)
                 bYear += bYear < 50 ? 1400 : 1300;
+            if (TimeSpan.TryParse(time, out TimeSpan t))
+                return p.ToDateTime(bYear, bMonth, bDay, t.Hours, t.Minutes, t.Seconds, 0, 0);
             return p.ToDateTime(bYear, bMonth, bDay, 0, 0, 0, 0);
         }
         /// <summary>

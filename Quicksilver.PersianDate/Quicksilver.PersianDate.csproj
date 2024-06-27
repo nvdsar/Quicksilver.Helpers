@@ -12,8 +12,9 @@
     <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
     <PackageTags>Persian; date; PersianDate; extensions; helpers; Date; SolarHijri; Shamsi; Ghamari; LunarHijri; Hijri; Gregorian; Miladi; Iran;</PackageTags>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+    <PackageReleaseNotes>Added Time parameter in ToGregorianDate method</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include ="NSIcon.png">
+    <None Include="NSIcon.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include ="ReadMe.md">
+    <None Include="ReadMe.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>

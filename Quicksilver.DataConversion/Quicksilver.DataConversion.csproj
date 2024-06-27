@@ -9,20 +9,21 @@
 		<Copyright>2024</Copyright>
 		<PackageIcon>NSIcon.png</PackageIcon>
 		<PackageTags>Convert; Conversion; ValueType; DataType; Value; DataConversion; Extensions;</PackageTags>
-		<PackageReleaseNotes>initial release</PackageReleaseNotes>
+		<PackageReleaseNotes>To Boolean From Integer added</PackageReleaseNotes>
 		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Description>This repository was created by Navid Sargheiny as a simple library to simplify data conversion, especially value type conversion. It has features such as understanding null values and providing default values in null cases.</Description>
 		<PackageProjectUrl></PackageProjectUrl>
 		<RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
+		<Version>1.1.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include ="ReadMe.md">
+	  <None Include="ReadMe.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
-	  <None Include ="NSIcon.png">
+	  <None Include="NSIcon.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>

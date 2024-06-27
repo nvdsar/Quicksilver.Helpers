@@ -207,6 +207,7 @@ namespace Quicksilver.DataConversion
         /// <param name="defaultValue">The default value for null possibilities</param>
         /// <returns></returns>
         public static bool ToBoolean(this object obj) => obj.ToNullableBoolean().GetValueOrDefault(false);
+        public static bool ToBoolean(this int obj) => obj == 1 ? true : false;
         /// <summary>
         /// Try to convert to DateTime, if not possible then Add Days to <see cref="DateTime.MinValue"/>
         /// </summary>
