@@ -87,6 +87,12 @@ namespace Quicksilver.StringHelpers
         {
             return source.Remove(source.LastIndexOf(trimWord) + trimWord.Count());
         }
+        /// <summary>
+        /// Check if string is empty or is null
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty(this string source) => string.IsNullOrEmpty(source);
     }
     public static class PersianStringExtensions
     {
