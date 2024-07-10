@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net7.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Title>Picture Resizer</Title>
+		<Authors>Navid Sargheiny</Authors>
+		<Description>This repository was created by Navid Sargheiny as a simple library for resizing pictures (jpg, jpeg, png) using the SkiaSharp library. It can also provide thumbnail pictures.</Description>
+		<Copyright>2024</Copyright>
+		<PackageIcon>NSIcon.png</PackageIcon>
+		<RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
+		<PackageTags>Picture; resize; size; thumbnail; small; content; image; jpg; png; jpeg; document; storage; </PackageTags>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="SkiaSharp" Version="2.88.7" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Quicksilver.DataConversion\Quicksilver.DataConversion.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="NSIcon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Update="ReadMe.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+</Project>

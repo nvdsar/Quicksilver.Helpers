@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{4DB54522-8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.Test.MockData", "Quicksilver.Test.MockData\Quicksilver.Test.MockData.csproj", "{25E75C7D-66F3-4EED-8F0D-E5E9140F6CAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.EnumerableHelpers", "Quicksilver.EnumerableHelpers\Quicksilver.EnumerableHelpers.csproj", "{8AF65DF7-2C87-4032-B788-BE17ED64C88E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.EnumerableHelpers", "Quicksilver.EnumerableHelpers\Quicksilver.EnumerableHelpers.csproj", "{8AF65DF7-2C87-4032-B788-BE17ED64C88E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.PictureResizer", "Quicksilver.PictureResizer\Quicksilver.PictureResizer.csproj", "{D1261A35-4C2C-48B8-8007-D451548D3027}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{8AF65DF7-2C87-4032-B788-BE17ED64C88E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AF65DF7-2C87-4032-B788-BE17ED64C88E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AF65DF7-2C87-4032-B788-BE17ED64C88E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1261A35-4C2C-48B8-8007-D451548D3027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1261A35-4C2C-48B8-8007-D451548D3027}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1261A35-4C2C-48B8-8007-D451548D3027}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1261A35-4C2C-48B8-8007-D451548D3027}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

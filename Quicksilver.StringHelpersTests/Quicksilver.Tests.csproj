@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Quicksilver.DataConversion\Quicksilver.DataConversion.csproj" />
     <ProjectReference Include="..\Quicksilver.EnumerableHelpers\Quicksilver.EnumerableHelpers.csproj" />
     <ProjectReference Include="..\Quicksilver.PersianDate\Quicksilver.PersianDate.csproj" />
+    <ProjectReference Include="..\Quicksilver.PictureResizer\Quicksilver.PictureResizer.csproj" />
     <ProjectReference Include="..\Quicksilver.StringHelpers\Quicksilver.StringHelpers.csproj" />
     <ProjectReference Include="..\Quicksilver.Test.MockData\Quicksilver.Test.MockData.csproj" />
   </ItemGroup>
