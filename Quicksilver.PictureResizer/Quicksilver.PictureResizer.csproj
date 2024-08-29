@@ -11,8 +11,7 @@
 		<PackageIcon>NSIcon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
 		<PackageTags>Picture; resize; size; thumbnail; small; content; image; jpg; png; jpeg; document; storage; </PackageTags>
-		<PackageReleaseNotes>
-			Watermark Class:
+		<PackageReleaseNotes>			Watermark Class:
 			Added a new Watermark class to represent watermark data, including properties for the image, reversal, and position.
 			WatermarkAdapter Class:
 			Introduced new methods AddWatermark(byte[], Watermark[]) and AddWatermark(string, Watermark[]) to add watermarks to images represented as byte arrays or base64-encoded strings, respectively.
@@ -23,6 +22,7 @@
 		</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+		<Version>1.1.0</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="SkiaSharp" Version="2.88.7" />
