@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Title>Picture Resizer</Title>
@@ -11,7 +11,16 @@
 		<PackageIcon>NSIcon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/nvdsar/Quicksilver.Helpers.git</RepositoryUrl>
 		<PackageTags>Picture; resize; size; thumbnail; small; content; image; jpg; png; jpeg; document; storage; </PackageTags>
-		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<PackageReleaseNotes>
+			Watermark Class:
+			Added a new Watermark class to represent watermark data, including properties for the image, reversal, and position.
+			WatermarkAdapter Class:
+			Introduced new methods AddWatermark(byte[], Watermark[]) and AddWatermark(string, Watermark[]) to add watermarks to images represented as byte arrays or base64-encoded strings, respectively.
+			Enhancements:
+
+			Watermark Flexibility: The Watermark class now supports both byte array and base64-encoded string representations for the image data, providing more flexibility in watermark usage.
+			Improved Readability: The code has been refactored to improve readability and maintainability.
+		</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReadmeFile>ReadMe.md</PackageReadmeFile>
 	</PropertyGroup>

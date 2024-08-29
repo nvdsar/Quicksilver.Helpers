@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.Test.MockData",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.EnumerableHelpers", "Quicksilver.EnumerableHelpers\Quicksilver.EnumerableHelpers.csproj", "{8AF65DF7-2C87-4032-B788-BE17ED64C88E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksilver.PictureResizer", "Quicksilver.PictureResizer\Quicksilver.PictureResizer.csproj", "{D1261A35-4C2C-48B8-8007-D451548D3027}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quicksilver.PictureResizer", "Quicksilver.PictureResizer\Quicksilver.PictureResizer.csproj", "{D1261A35-4C2C-48B8-8007-D451548D3027}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

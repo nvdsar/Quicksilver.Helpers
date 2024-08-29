@@ -4,206 +4,282 @@ using SkiaSharp;
 
 namespace Quicksilver.PictureResizer
 {
-    public class ImageSizer
+    /// <summary>
+    /// Represents a set of factors used for image resizing.
+    /// </summary>
+    public class ImageResizeFactors
     {
-        private const string ThumbnailFolderName = "Thumbnail";
-        private static int minAcceptableSize = 512 * 1000;
+        /// <summary>
+        /// Gets or sets the file extension of the resized image (e.g., "jpg", "png").
+        /// </summary>
+        public string? Extension { get; set; }
+        /// <summary>
+        /// Gets or sets the scale factor to apply to the image (1.0 for no change).
+        /// </summary>
+        public double ScaleFactor { get; set; }
+        /// <summary>
+        /// Gets or sets the quality of the resizing filter (default is SKFilterQuality.Low). Higher quality filters may result in larger image sizes.
+        /// </summary>
+        public SKFilterQuality Quality { get; set; } = SKFilterQuality.Low;
 
         /// <summary>
-        /// Change the minimum acceptable size of resized image.
+        /// Creates a new ImageResizeFactors object with a smaller scale factor applied.
         /// </summary>
-        /// <param name="size">Acceptable size, based on bytes</param>
+        /// <param name="scaleFactor">The additional scale factor to apply (multiplied by the current scale factor).</param>
+        /// <returns>A new ImageResizeFactors object with the updated scale factor.</returns>
+        internal ImageResizeFactors SmallerScale(double scaleFactor)
+        {
+            this.ScaleFactor *= scaleFactor;
+            return this;
+        }
+    }
+    /// <summary>
+    /// Provides methods for image resizing and generating thumbnails.
+    /// </summary>
+    public class ImageSizer
+    {
+        private const string ThumbnailFolderName = "Thumbnail"; // Constant for the thumbnail folder name.
+
+        private static int minAcceptableSize = 512_000; // Minimum acceptable size (in bytes) of a resized image.
+        private static int qualityFactor = 100; // Default quality factor for image encoding.
+
+        /// <summary>
+        /// Changes the minimum acceptable size for resized images.
+        /// </summary>
+        /// <param name="size">The new minimum acceptable size in bytes.</param>
         public static void ChangeMinAcceptableFileSize(int size)
         {
             minAcceptableSize = size;
         }
         /// <summary>
-        /// Resize an image stream into scale factor and return image stream
+        /// Resizes an image stream based on provided ImageResizeFactors and returns a new stream containing the resized image.
         /// </summary>
-        /// <param name="imgStream">stream of image to resize</param>
-        /// <param name="extension">extension of image</param>
-        /// <param name="scaleFactor">scale factor between 0 - 1 </param>
-        /// <returns>Resized image stream</returns>
-        /// <exception cref="ArgumentException"></exception>
-        public static Stream Resize(Stream imgStream, string extension, double scaleFactor)
+        /// <param name="imgStream">The stream containing the original image.</param>
+        /// <param name="resizeFactors">The object containing resizing factors like scale factor, extension, and quality.</param>
+        /// <returns>A new stream containing the resized image data.</returns>
+        /// <exception cref="ArgumentException">Thrown if the scale factor is less than or equal to 0.</exception>
+        public static Stream Resize(Stream imgStream, ImageResizeFactors resizeFactors)
         {
-            if (scaleFactor <= 0.0)
+            if (resizeFactors.ScaleFactor <= 0.0)
             {
-                throw new ArgumentException("Negative scale factor is not allowed", nameof(scaleFactor));
+                throw new ArgumentException("Negative scale factor is not allowed", nameof(resizeFactors.ScaleFactor));
             }
 
-            if (scaleFactor == 1.0)
+            if (resizeFactors.ScaleFactor == 1.0) //No resizing needed
             {
                 return imgStream;
             }
 
-            using (var skImage = SKBitmap.Decode(imgStream))
+            using (SKBitmap skImage = SKBitmap.Decode(imgStream))
+            using (SKData encodedImage = ResizeCore(skImage, resizeFactors))
             {
-                int newHeight = (int)(skImage.Height * scaleFactor);
-                int newWidth = (int)(skImage.Width * scaleFactor);
-
-                using (var scaledBitmap = skImage.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.Low))
-                {
-                    using (var image = SKImage.FromBitmap(scaledBitmap))
-                    {
-                        int qualityFactor = scaleFactor < 1 ? (scaleFactor * 100).ToInt32() : 50;
-                        using (var encodedImage = image.Encode(MimeTypeMapping.GetSkiaSharpImageFormatFromExtension(extension), qualityFactor))
-                        {
-                            if (encodedImage.Size < minAcceptableSize)
-                            {
-                                var stream = new MemoryStream();
-                                encodedImage.SaveTo(stream);
-                                stream.Seek(0, SeekOrigin.Begin);
-                                return stream;
-                            }
-
-                        }
-                    }
-                }
-            }
-            return Resize(imgStream, extension, scaleFactor * 0.75);
+                MemoryStream stream = new();
+                encodedImage.SaveTo(stream);
+                _ = stream.Seek(0, SeekOrigin.Begin);
+                return stream;
+            };
         }
         /// <summary>
-        /// Create thumbnail of an image
+        /// Resizes an image represented as a byte array based on the provided resize factors.
         /// </summary>
-        /// <param name="imgStream">stream of image to resize</param>
-        /// <param name="extension">extension of image</param>
-        /// <param name="thumbnailHeight">thumbnail height in pixels</param>
-        /// <returns>Thumbnail image stream</returns>
+        /// <param name="image">The image data as a byte array.</param>
+        /// <param name="resizeFactors">An object containing the resize factors (extension, scale factor, and quality).</param>
+        /// <returns>A byte array containing the resized image data.</returns>
+        /// <exception cref="ArgumentException">Thrown if the scaleFactor is less than or equal to 0.</exception>
+        public static byte[] Resize(byte[] image, ImageResizeFactors resizeFactors)
+        {
+            if (resizeFactors.ScaleFactor <= 0.0)
+            {
+                throw new ArgumentException("Negative scale factor is not allowed", nameof(resizeFactors.ScaleFactor));
+            }
+
+            if (resizeFactors.ScaleFactor == 1.0) //No resizing needed
+            {
+                return image;
+            }
+
+            using (SKBitmap skImage = SKBitmap.Decode(image))
+            using (SKData encodedImage = ResizeCore(skImage, resizeFactors))
+            {
+                return encodedImage.ToArray();
+            };
+        }
+        /// <summary>
+        /// Resizes a base64-encoded image string based on the provided resize factors and returns the resized image as a base64-encoded string.
+        /// </summary>
+        /// <param name="base64Image">The base64-encoded image data.</param>
+        /// <param name="resizeFactors">An object containing the resize factors (extension, scale factor, and quality).</param>
+        /// <returns>A base64-encoded string containing the resized image data.</returns>
+        /// <exception cref="ArgumentException">Thrown if the scaleFactor is less than or equal to 0.</exception>
+        public static string Resize(string base64Image, ImageResizeFactors resizeFactors)
+        {
+            byte[] data = Convert.FromBase64String(base64Image);
+            byte[] resizedImageData = Resize(data, resizeFactors);
+            return Convert.ToBase64String(resizedImageData);
+        }
+
+        /// <summary>
+        /// Creates a thumbnail of an image stream based on the provided extension and thumbnail height and returns a new stream containing the thumbnail image.
+        /// </summary>
+        /// <param name="imgStream">The stream containing the original image.</param>
+        /// <param name="extension">The file extension of the thumbnail image (e.g., "jpg", "png").</param>
+        /// <param name="thumbnailHeight">The desired height of the thumbnail in pixels (default is 150).</param>
+        /// <returns>A new stream containing the thumbnail image data.</returns>
         public static Stream Thumbnail(Stream imgStream, string extension, int thumbnailHeight = 150)
         {
-            using (var skImage = SKBitmap.Decode(imgStream))
-            {
-                var ratio = (double)thumbnailHeight / (double)skImage.Height;
-                int newHeight = (int)(skImage.Height * ratio);
-                int newWidth = (int)(skImage.Width * ratio);
-
-                using (var scaledBitmap = skImage.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.Low))
-                {
-                    using (var image = SKImage.FromBitmap(scaledBitmap))
-                    {
-                        using (SKData encodedImage = image.Encode(MimeTypeMapping.GetSkiaSharpImageFormatFromExtension(extension), 50))
-                        {
-                            var stream = new MemoryStream();
-                            encodedImage.SaveTo(stream);
-                            stream.Seek(0, SeekOrigin.Begin);
-                            return stream;
-
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Resize an image stream into scale factor and save on a certain address and name
-        /// </summary>
-        /// <param name="imgStream">stream of image to resize</param>
-        /// <param name="extension">extension of image</param>
-        /// <param name="scaleFactor">scale factor between 0 - 1 </param>
-        /// <param name="fileName">name of the file <b>NOT</b> containing extension</param>
-        /// <param name="address">Path to save the file</param>
-        /// <exception cref="ArgumentException"></exception>
-        public static void SaveResize(Stream imgStream, string extension, double scaleFactor, string fileName, string address)
-        {
-
-            if (scaleFactor <= 0.0)
-            {
-                throw new ArgumentException("Negative scale factor is not allowed", nameof(scaleFactor));
-            }
-            if (scaleFactor >= 1.0)
-            {
-                throw new ArgumentException("More than 1 scale factor is not allowed", nameof(scaleFactor));
-            }
-
-
-            if (Directory.Exists(address) == false)
-                Directory.CreateDirectory(address);
-
-
             using (SKBitmap skImage = SKBitmap.Decode(imgStream))
+            using (SKData encodedImage = ThumbnailCore(skImage, extension, thumbnailHeight))
             {
-                int newHeight = (int)(skImage.Height * scaleFactor);
-                int newWidth = (int)(skImage.Width * scaleFactor);
-
-                using (var scaledBitmap = skImage.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.Low))
-                {
-                    resize(scaledBitmap, scaleFactor);
-                }
-
-                void resize(SKBitmap sKBitmap, double scaleFactor)
-                {
-                    using (var image = SKImage.FromBitmap(sKBitmap))
-                    {
-                        int qualityFactor = scaleFactor < 1 ? (scaleFactor * 100).ToInt32() : 50;
-                        using (var encodedImage = image.Encode(MimeTypeMapping.GetSkiaSharpImageFormatFromExtension(extension), qualityFactor))
-                        {
-                            if (encodedImage.Size < minAcceptableSize)
-                            {
-                                using (var stream = File.OpenWrite(Path.Combine(address, $"{fileName}{extension}")))
-                                {
-                                    encodedImage.SaveTo(stream);
-                                }
-                                return;
-                            }
-
-                        }
-                    }
-                    resize(sKBitmap, scaleFactor * 0.75);
-                }
+                MemoryStream stream = new();
+                encodedImage.SaveTo(stream);
+                _ = stream.Seek(0, SeekOrigin.Begin);
+                return stream;
             }
-
-
         }
         /// <summary>
-        /// Create thumbnail of an image and save on "Thumbnail" folder in the file address
+        /// Creates a thumbnail of an image represented as a byte array based on the provided extension and thumbnail height and returns a byte array containing the thumbnail image data.
         /// </summary>
-        /// <param name="fileAddress">full name and address of the file to create thumbnail</param>
-        /// <param name="thumbnailHeight">thumbnail height in pixels</param>
+        /// <param name="image">The image data as a byte array.</param>
+        /// <param name="extension">The file extension of the thumbnail image (e.g., "jpg", "png").</param>
+        /// <param name="thumbnailHeight">The desired height of the thumbnail in pixels (default is 150).</param>
+        /// <returns>A byte array containing the thumbnail image data.</returns>
+        public static byte[] Thumbnail(byte[] image, string extension, int thumbnailHeight = 150)
+        {
+            using (SKBitmap skImage = SKBitmap.Decode(image))
+            using (SKData encodedImage = ThumbnailCore(skImage, extension, thumbnailHeight))
+            {
+                return encodedImage.ToArray();
+            };
+        }
+        /// <summary>
+        /// Creates a thumbnail of a base64-encoded image string based on the provided extension and thumbnail height and returns the resized image as a base64-encoded string.
+        /// </summary>
+        /// <param name="base64Image">The base64-encoded image data.</param>
+        /// <param name="extension">The file extension of the thumbnail image (e.g., "jpg", "png").</param>
+        /// <param name="thumbnailHeight">The desired height of the thumbnail in pixels (default is 150).</param>
+        /// <returns>A base64-encoded string containing the thumbnail image data.</returns>
+        public static string Thumbnail(string base64Image, string extension, int thumbnailHeight = 150)
+        {
+            byte[] data = Convert.FromBase64String(base64Image);
+            byte[] resizedImageData = Thumbnail(data, extension, thumbnailHeight);
+            return Convert.ToBase64String(resizedImageData);
+        }
+
+
+        /// <summary>
+        /// Saves a resized version of an image from a stream to a specified location.
+        /// </summary>
+        /// <param name="imgStream">The stream containing the original image.</param>
+        /// <param name="resizeFactors">An object containing the desired scale factor, extension, and quality for the resized image.</param>
+        /// <param name="fileName">The name of the resized image file.</param>
+        /// <param name="address">The directory path where the resized image will be saved.</param>
+        public static void SaveResize(Stream imgStream, ImageResizeFactors resizeFactors, string fileName, string address)
+        {
+            if (Directory.Exists(address) == false)
+                _ = Directory.CreateDirectory(address);
+            using (SKBitmap skImage = SKBitmap.Decode(imgStream))
+            using (SKData encodedImage = ResizeCore(skImage, resizeFactors))
+            {
+                using (FileStream stream = File.OpenWrite(Path.Combine(address, $"{fileName}{resizeFactors.Extension}")))
+                {
+                    encodedImage.SaveTo(stream);
+                }
+                return;
+            }
+        }
+        /// <summary>
+        /// Creates a thumbnail of an image at the specified location and saves it to a dedicated thumbnail folder.
+        /// </summary>
+        /// <param name="fileAddress">The full path of the original image file.</param>
+        /// <param name="thumbPrintHeight">The desired height of the thumbnail in pixels (default is 150).</param>
+        /// <exception cref="ArgumentException">Thrown if the fileAddress is null or empty.</exception>
         public static void SaveThumbnail(string fileAddress, int thumbPrintHeight = 150)
         {
-            var fileinfo = new FileInfo(fileAddress);
-            var directory = Path.Combine(fileinfo.DirectoryName, ThumbnailFolderName);
+            if (string.IsNullOrEmpty(fileAddress))
+            {
+                throw new ArgumentException($"'{nameof(fileAddress)}' cannot be null or empty.", nameof(fileAddress));
+            }
+
+            FileInfo fileInfo = new(fileAddress);
+            string directory = Path.Combine(fileInfo.DirectoryName, ThumbnailFolderName);
             if (Directory.Exists(directory) == false)
-                Directory.CreateDirectory(directory);
+                _ = Directory.CreateDirectory(directory);
 
-            var bitmap = SKBitmap.Decode(fileAddress);
-            var resizeFactor = bitmap.Height > thumbPrintHeight ? (double)thumbPrintHeight / (double)bitmap.Height : 0.5;
-            int width = (int)Math.Round(bitmap.Width * resizeFactor);
-            int height = (int)Math.Round(bitmap.Height * resizeFactor);
-            var toBitmap = new SKBitmap(width, height, bitmap.ColorType, bitmap.AlphaType);
-
-            var canvas = new SKCanvas(toBitmap);
-            // Draw a bitmap rescaled
-            canvas.SetMatrix(SKMatrix.CreateScale((float)resizeFactor, (float)resizeFactor));
-            canvas.DrawBitmap(bitmap, 0, 0);
-            canvas.ResetMatrix();
-
-            var image = SKImage.FromBitmap(toBitmap);
-            var data = image.Encode(MimeTypeMapping.GetSkiaSharpImageFormatFromExtension(fileinfo.Extension), 90);
-
-            using (var stream = new FileStream(Path.Combine(directory, fileinfo.Name), FileMode.Create, FileAccess.Write))
+            using (SKBitmap bitmap = SKBitmap.Decode(fileAddress))
+            using (SKData data = ThumbnailCore(bitmap, fileInfo.Extension, thumbPrintHeight))
+            using (FileStream stream = new(Path.Combine(directory, fileInfo.Name), FileMode.Create, FileAccess.Write))
+            {
                 data.SaveTo(stream);
+            }
+        }
 
-            data.Dispose();
-            image.Dispose();
-            canvas.Dispose();
-            toBitmap.Dispose();
-            bitmap.Dispose();
+
+        /// <summary>
+        /// Performs the core image resizing logic using provided SKBitmap and ImageResizeFactors.
+        /// </summary>
+        /// <param name="skImage">The SKBitmap object representing the image to resize.</param>
+        /// <param name="resizeFactors">The object containing resizing factors like scale factor, extension, and quality.</param>
+        /// <returns>An SKData object containing the encoded resized image data.</returns>
+        private static SKData ResizeCore(SKBitmap skImage, ImageResizeFactors resizeFactors)
+        {
+            SKImageInfo newImageInfo = new((int)(skImage.Height * resizeFactors.ScaleFactor), (int)(skImage.Width * resizeFactors.ScaleFactor));
+
+            return _ResizeCore(skImage, newImageInfo, resizeFactors);
+        }
+        /// <summary>
+        /// Creates a thumbnail image from an SKBitmap with a specified height.
+        /// </summary>
+        /// <param name="skImage">The SKBitmap object representing the image to create a thumbnail from.</param>
+        /// <param name="extension">The file extension of the thumbnail image (e.g., "jpg", "png").</param>
+        /// <param name="thumbnailHeight">The desired height of the thumbnail in pixels (default is 150).</param>
+        /// <returns>An SKData object containing the encoded thumbnail image data.</returns>
+        private static SKData ThumbnailCore(SKBitmap skImage, string extension, int thumbnailHeight = 150)
+        {
+
+            double ratio = thumbnailHeight / (double)skImage.Height;
+            SKImageInfo newImageInfo = new((int)(skImage.Width * ratio), (int)(skImage.Height * ratio));
+            ImageResizeFactors imgResizeFactors = new()
+            {
+                Extension = extension,
+                ScaleFactor = skImage.Height > thumbnailHeight ? thumbnailHeight / (double)skImage.Height : 0.5,
+                Quality = SKFilterQuality.Low
+            };
+            return _ResizeCore(skImage, newImageInfo, imgResizeFactors);
+        }
+        private static SKData _ResizeCore(SKBitmap skImage, SKImageInfo newImageInfo, ImageResizeFactors resizeFactors)
+        {
+            using (SKBitmap scaledBitmap = skImage.Resize(newImageInfo, resizeFactors.Quality))
+            using (SKImage image = SKImage.FromBitmap(scaledBitmap))
+            {
+                //50 is default quality factor, which is good enough for most cases
+                //if image is bigger than 512kb, we will use 50 as quality factor
+                //otherwise we will use scaleFactor * 100 as quality factor
+                int qualityFactor = resizeFactors.ScaleFactor < 1 ? (resizeFactors.ScaleFactor * 100).ToInt32() : 50;
+                SKData encodedImage = image.Encode(MimeTypeMapping.GetSkiaSharpImageFormatFromExtension(resizeFactors.Extension), qualityFactor);
+                if (encodedImage.Size <= minAcceptableSize)
+                    return encodedImage;
+
+            }
+
+            return ResizeCore(skImage, resizeFactors.SmallerScale(0.75));
         }
     }
     internal static class MimeTypeMapping
     {
         public static string GetMimeTypeFromExtension(string extension)
         {
-            ArgumentException.ThrowIfNullOrEmpty(extension, nameof(extension));
+            //ArgumentException.ThrowIfNullOrEmpty(extension, nameof(extension));
+            if (string.IsNullOrEmpty(extension))
+                throw new ArgumentNullException(nameof(extension));
 
             return _mimeTypeMapping.TryGetValue(extension, out string mimeType) ? mimeType : DEFAULT_MIME_TYPE;
         }
 
         public static SKEncodedImageFormat GetSkiaSharpImageFormatFromExtension(string extension)
         {
-            ArgumentException.ThrowIfNullOrEmpty(extension, nameof(extension));
+            //ArgumentException.ThrowIfNullOrEmpty(extension, nameof(extension));
+            if (string.IsNullOrEmpty(extension))
+                throw new ArgumentNullException(nameof(extension));
 
             return _skiaSharpImageFormatMapping.TryGetValue(extension, out SKEncodedImageFormat imageFormat) ? imageFormat : DEFAULT_IMAGE_FORMAT;
         }
